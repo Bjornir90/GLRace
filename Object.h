@@ -3,6 +3,8 @@
 #include <GLFW/glfw3.h> // GLFW helper library
 #include "stdlib.h"
 #include "math.h"
+#include "GLmain.h"
+
 class Object
 {
 public:
@@ -18,5 +20,6 @@ protected:
 	float * _texcoors;
 	float * _colors;
 	unsigned int _size; //Number of Vertices / Normals / Texture Coordonates
+	glm::mat4 modelMatrix;
 };
 

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CarBody.h"
+#include "Object.h"
 
 
 CarBody::CarBody() : Object::Object()
@@ -12,9 +13,11 @@ CarBody::~CarBody()
 {
 }
 
-void tesselate(int n) { //subdivise each rectangle n times in 4
+void CarBody::tesselate(int n) { //subdivise each rectangle n times in 4
 	for (int i = 0; i < n; i++) {
-		for(int vertexIndex = 0; vertexIndex < _size)
+		for (int vertexIndex = 3; vertexIndex < _size; vertexIndex+=3) {
+
+		}
 	}
 }
 
@@ -145,3 +148,4 @@ void CarBody::draw() {
 	glBindVertexArray(_vao);
 	glDrawArrays(GL_QUADS, 0, getSize());
 }
+

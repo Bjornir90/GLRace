@@ -14,13 +14,9 @@ public:
 
 	void draw();
 
-	unsigned int getSize() { return _size; }
-
-	unsigned int _vao;
 
 protected:
 	float * _wheelsOffset;
-	glm::mat4 modelMatrix;
 
 private:
 	void tesselate(int n);
