@@ -4,7 +4,7 @@
 Object::Object()
 {
 	_size = 0;
-	_vertices = _normals = _texcoors = NULL;
+	_vertices = _normals = _texcoors = _colors = NULL;
 	_vao = 0;
 }
 
@@ -15,6 +15,9 @@ Object::~Object()
 
 	if (_normals != NULL)
 		delete[] _normals;
+
+	if (_colors != NULL)
+		delete[] _colors;
 
 	if (_texcoors != NULL)
 		delete[] _texcoors;
@@ -38,12 +41,12 @@ void Object::InitVBO(void) {
 		_normals,
 		GL_STATIC_DRAW);
 
-	unsigned int vboTexCoords = 0;
-	glGenBuffers(1, &vboTexCoords);
-	glBindBuffer(GL_ARRAY_BUFFER, vboTexCoords);
+	unsigned int vboColors = 0;
+	glGenBuffers(1, &vboColors);
+	glBindBuffer(GL_ARRAY_BUFFER, vboColors);
 	glBufferData(GL_ARRAY_BUFFER,
-		2 * _size * sizeof(float),
-		_texcoors,
+		3 * _size * sizeof(float),
+		_colors,
 		GL_STATIC_DRAW);
 
 	_vao = 0;
@@ -52,17 +55,18 @@ void Object::InitVBO(void) {
 
 	// vertex positions are location 0
 	glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 	glEnableVertexAttribArray(0);
 
-	// normals are location 1
-	glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+	// vertex colors are location 1
+	glBindBuffer(GL_ARRAY_BUFFER, vboColors);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 	glEnableVertexAttribArray(1); // don't forget this!
 
-								  // normals are location 2
-	glBindBuffer(GL_ARRAY_BUFFER, vboTexCoords);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+	// normals are location 2
+	glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 	glEnableVertexAttribArray(2); // don't forget this!
+
 
 }

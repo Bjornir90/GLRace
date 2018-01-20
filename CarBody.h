@@ -3,14 +3,14 @@
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
 #include "GLmain.h"
+#include "Object.h"
 
-class CarBody
+class CarBody : public Object
 {
 public:
 	CarBody();
 	virtual ~CarBody();
 	void buildBody(int size, float reductionFactor);
-	void InitVBO(void);
 
 	void draw();
 
@@ -19,12 +19,10 @@ public:
 	unsigned int _vao;
 
 protected:
-	float * _vertices;
-	float * _normals;
-	float * _colors;
-	float * _texcoors;
 	float * _wheelsOffset;
 	glm::mat4 modelMatrix;
-	unsigned int _size; //Number of Vertices / Normals / Texture Coordinates
+
+private:
+	void tesselate(int n);
 };
 

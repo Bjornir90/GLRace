@@ -2,12 +2,9 @@
 #include "CarBody.h"
 
 
-CarBody::CarBody()
+CarBody::CarBody() : Object::Object()
 {
-	_size = 0;
-	_vertices = _normals = _texcoors = _wheelsOffset = NULL;
-	_colors = NULL;
-	_vao = 0;
+	_wheelsOffset = NULL;
 }
 
 
@@ -15,6 +12,11 @@ CarBody::~CarBody()
 {
 }
 
+void tesselate(int n) { //subdivise each rectangle n times in 4
+	for (int i = 0; i < n; i++) {
+		for(int vertexIndex = 0; vertexIndex < _size)
+	}
+}
 
 void CarBody::buildBody(int size, float reductionFactor) {
 	// vertices array
@@ -87,7 +89,7 @@ void CarBody::buildBody(int size, float reductionFactor) {
 }
 
 
-void CarBody::InitVBO(void) {
+/*void CarBody::InitVBO(void) {
 	// vertex buffer objects and vertex array
 	unsigned int vboVertices = 0;
 	//creates 1 buffer at the identifier "vboVertices"
@@ -137,7 +139,7 @@ void CarBody::InitVBO(void) {
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 	glEnableVertexAttribArray(2); // don't forget this!
 
-}
+}*/
 
 void CarBody::draw() {
 	glBindVertexArray(_vao);

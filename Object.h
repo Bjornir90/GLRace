@@ -16,6 +16,7 @@ protected:
 	float * _vertices;
 	float * _normals;
 	float * _texcoors;
+	float * _colors;
 	unsigned int _size; //Number of Vertices / Normals / Texture Coordonates
 };
 
