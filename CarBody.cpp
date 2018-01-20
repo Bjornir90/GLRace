@@ -140,5 +140,6 @@ void CarBody::InitVBO(void) {
 }
 
 void CarBody::draw() {
+	glBindVertexArray(_vao);
 	glDrawArrays(GL_QUADS, 0, getSize());
 }

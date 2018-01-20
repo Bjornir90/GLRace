@@ -21,6 +21,7 @@ out vec3 lightOut;
 out vec3 colorOut;
 // position in model coordinates
 out vec3 positionOut;
+out vec3 fragPos;
 
 void main() {
 	// transforms light from world coordinates to model coordinates
@@ -35,6 +36,8 @@ void main() {
 
 	colorOut = colors;
 
+	fragPos = vec3(modelMatrix * vec4(vp, 1.0));
+
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vp, 1.0);
 }
 
@@ -46,6 +49,7 @@ in vec3 normalOut;
 in vec2 texCoordOut;
 in vec3 lightOut;
 in vec3 colorOut;
+in vec3 fragPos;
 // position in model coordinates
 in vec3 positionOut;
 
@@ -57,9 +61,13 @@ uniform vec3 ambient;
 out vec4 frag_colour;
 
 void main() {
-	
+	float sum = 0.0f;
+	for (int i = 0; i < 3; i++) {
+		sum += abs(fragPos[i] - lightOut[i]);
+	}
+	float distance = sqrt(sum);
 
 	// diffuse lighting contribution to color
-	float diffuse = max(dot(normalize(normalOut), normalize(lightOut)), 0.0f);
+	float diffuse = max(dot(normalize(normalOut), normalize(lightOut))/(( 0.2f*distance+0.2f*distance*distance )), 0.0f);
 	frag_colour.rgb = vec3((diffuse + ambient)*colorOut);
 }

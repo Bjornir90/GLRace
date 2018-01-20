@@ -19,6 +19,5 @@ void Car::buildCar() {
 }
 
 void Car::draw() {
-	glBindVertexArray(body->_vao);
 	body->draw();
 }

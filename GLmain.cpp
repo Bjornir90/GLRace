@@ -5,7 +5,7 @@
 #include "Car.h"
 
 // perspective vs ortho projection
-bool perspective = false;
+bool perspective = true;
 
 GeoObject object;
 
@@ -26,12 +26,14 @@ GLint uniform_ambient;
 GLfloat rotation_angle = 0.0f;
 GLfloat rotation_angle_vert = 0.0f;
 GLfloat rotation_angle_x = 0.0f;
+GLfloat translateY = 0.0f;
 
 
 // light
 float lightPosition[3] = { 0.0f , 0.0f , 8.0f };
 float lightPos[3] = { 3.0f, 3.0f, 3.0f };
 float ambientLight[3] = { 0.2f, 0.2f, 0.2f };
+glm::vec3 cameraPosition =  glm::vec3( 8.0f, 2.0f, 0.0f );
 
 int screen_width = 1024;
 int screen_height = 768;
@@ -148,6 +150,7 @@ static unsigned int CreateShader(const std::string& vertexShader, const std::str
 	return program;
 }
 
+
 int main(void)
 {
 	GLFWwindow* window;
@@ -184,6 +187,7 @@ int main(void)
 	//body.buildBody(28, 1);
 	//body.InitVBO();
 	car.buildCar();
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
 	ShaderProgramSources source = ParseShader("car.shader");
 	unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
@@ -195,7 +199,7 @@ int main(void)
 		// projection matrix
 		glm::mat4 projectionMatrix; // Store the projection matrix
 		glm::mat4 viewMatrix; // Store the view matrix
-		glm::mat4 modelMatrix; // Store the model matrix
+		//glm::mat4 modelMatrix; // Store the model matrix
 
 							   // Projection: Perspective or Ortho matrix
 		if (perspective) {
@@ -212,17 +216,17 @@ int main(void)
 		// Camera matrix
 		viewMatrix
 			= glm::lookAt(
-				glm::vec3(4, 3, 3), // Camera is at (4,3,3), in World Space
-				glm::vec3(0, 0, 0), // and looks at the origin
+				cameraPosition, // Camera is at (8,2,0), in World Space
+				glm::vec3(-8, -2, 0) + cameraPosition, // and looks at the origin
 				glm::vec3(0, 0, 1)  // Head is up (set to 0,1,0)
 			);
 
 		// Model matrix : a varying rotation matrix (around Oz)
 		
-		modelMatrix = glm::mat4(1.0f);
 		modelMatrix = glm::rotate(modelMatrix, rotation_angle, glm::vec3(0, 0, 1));
 		modelMatrix = glm::rotate(modelMatrix, rotation_angle_vert, glm::vec3(0, 1, 0));
 		modelMatrix = glm::rotate(modelMatrix, rotation_angle_x, glm::vec3(1, 0, 0));
+		modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, translateY));
 
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -274,26 +278,58 @@ void char_callback(GLFWwindow* window, unsigned int key)
 	if (key == 'o' || key == 'O')
 		perspective = false;
 	if (key == 'k') {
-		rotation_angle += 0.1f;
+		rotation_angle += 0.01f;
 	}
 
 	if (key == 'l') {
-		rotation_angle -= 0.1f;
+		rotation_angle -= 0.01f;
 	}
 
 	if (key == 'u') {
-		rotation_angle_vert += 0.1f;
+		rotation_angle_vert += 0.01f;
 	}
 
 	if (key == 'j') {
-		rotation_angle_vert -= 0.1f;
+		rotation_angle_vert -= 0.01f;
 	}
 
 	if (key == 'h') {
-		rotation_angle_x += 0.1f;
+		rotation_angle_x += 0.01f;
 	}
 
 	if (key == 'n') {
-		rotation_angle_x -= 0.1f;
+		rotation_angle_x -= 0.01f;
+	}
+
+	if (key == 'f') {
+		translateY -= 0.1f;
+	}
+
+	if (key == 'r') {
+		translateY += 0.1f;
+	}
+
+	if (key == '5') {
+		cameraPosition[0] += 0.1f;
+	}
+
+	if (key == '8') {
+		cameraPosition[0] -= 0.1f;
+	}
+
+	if (key == '6') {
+		cameraPosition[1] += 0.1f;
+	}
+
+	if (key == '4') {
+		cameraPosition[1] -= 0.1f;
+	}
+
+	if (key == '9') {
+		cameraPosition[2] += 0.1f;
+	}
+
+	if (key == '7') {
+		cameraPosition[2] -= 0.1f;
 	}
 }
