@@ -1,6 +1,7 @@
 #shader vertex
 #version 330 core
 
+
 // input varyings
 layout(location = 0) in vec3 vertexPosition;
 in vec3 norm;
@@ -25,13 +26,13 @@ out vec3 fragPos;
 
 void main() {
 	// transforms light from world coordinates to model coordinates
-	lightOut = (inverseModelMatrix * vec4(light, 0.0)).xyz;
+	lightOut = (inverseModelMatrix * vec4(light, 1.0)).xyz;
 
 	// copies normals and passes them to FS
 	normalOut = norm;
 	// copies texture coordinates and passes them to FS
 	texCoordOut = texCoord;
-	// copies position and passes it to FS
+	// copies position and passes it to FS (in model coordinates)
 	positionOut = vertexPosition;
 
 	colorOut = colors;
@@ -49,7 +50,7 @@ in vec3 normalOut;
 in vec2 texCoordOut;
 in vec3 lightOut;
 in vec3 colorOut;
-in vec3 fragPos;
+in vec3 fragPos;//world coordinate
 // position in model coordinates
 in vec3 positionOut;
 
@@ -63,11 +64,14 @@ out vec4 frag_colour;
 void main() {
 	float sum = 0.0f;
 	for (int i = 0; i < 3; i++) {
-		sum += abs(fragPos[i] - lightOut[i]);
+		sum += abs(positionOut[i] - lightOut[i]);
 	}
 	float distance = sqrt(sum);
 
+
+	vec3 lightDir = normalize(lightOut - positionOut);
 	// diffuse lighting contribution to color
-	float diffuse = max(dot(normalize(normalOut), normalize(lightOut))/(( 0.2f*distance+0.2f*distance*distance )), 0.0f);
+	float diffuse = max(dot(normalize(normalOut), lightDir), 0.0f);
 	frag_colour.rgb = vec3((diffuse + ambient)*colorOut);
+	//frag_colour.r = ambient[0]*distance;
 }
