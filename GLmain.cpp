@@ -33,7 +33,7 @@ GLfloat translateY = 0.0f;
 float lightPosition[3] = { 0.0f , 0.0f , 8.0f };
 float lightPos[3] = { 3.0f, 3.0f, 3.0f };
 float ambientLight[3] = { 0.2f, 0.2f, 0.2f };
-glm::vec3 cameraPosition =  glm::vec3( 8.0f, 2.0f, 0.0f );
+glm::vec3 cameraPosition =  glm::vec3( 2.0f, 2.0f, 10.0f );
 
 int screen_width = 1024;
 int screen_height = 768;
@@ -217,7 +217,7 @@ int main(void)
 		viewMatrix
 			= glm::lookAt(
 				cameraPosition, // Camera is at (8,2,0), in World Space
-				glm::vec3(-8, -2, 0) + cameraPosition, // and looks at the origin
+				glm::vec3(-2, -2, -10) + cameraPosition, // and looks at the origin
 				glm::vec3(0, 0, 1)  // Head is up (set to 0,1,0)
 			);
 
