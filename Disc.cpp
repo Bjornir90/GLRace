@@ -22,17 +22,22 @@ void Disc::buildDisc(float baseRadius, float height, int nbSlices)
 
 	_vertices = new float[_size * 3];
 	_normals = new float[_size * 3];
+	_colors = new float[_size * 3];
 	_texcoors = new float[_size * 2];
 
 	_baseRadius = baseRadius;
 	_height = height;
-
+	
+	if (height==0){
+		int sign=-1;
+	}
 	// angular distance between two lines
 	deltaPhi = 2 * M_PI / nbSlices;
 
 	float *vertices = _vertices;
 	float *normals = _normals;
 	float *texcoors = _texcoors;
+	float *colors = _colors;
 
 	// triangle strips made of vertical stacks
 	// tesselating the triangle strip into nbSlices
@@ -50,23 +55,29 @@ void Disc::buildDisc(float baseRadius, float height, int nbSlices)
 		float normalNorm = sqrt(1 + normY * normY);
 
 		// vertex #1 (theta , phi)
-		*normals = xPolar / normalNorm;
+		*normals = sign*1;
 		*vertices = xPolar * baseRadius;
+		*colors=0.8; //red
 
 		normals++;
 		vertices++;
+		colors++;
 
-		*normals = normY / normalNorm;
+		*normals = sign*1;
 		*vertices = height;
+		*colors=0.8; //green
 
 		normals++;
 		vertices++;
+		colors++;
 
-		*normals = zPolar / normalNorm;
+		*normals = sign*1;
 		*vertices = zPolar * baseRadius;
+		*colors=0.8;//blue
 
 		normals++;
 		vertices++;
+		colors++;
 
 		*texcoors = (float)j / (float)nbSlices;
 		texcoors++;
@@ -74,23 +85,29 @@ void Disc::buildDisc(float baseRadius, float height, int nbSlices)
 		texcoors++;
 
 		// vertex #2 (theta , phiPrime)
-		*normals = xPolar / normalNorm;
+		*normals = sign*1;
 		*vertices = height;
+		*colors=0.8;//red
 
 		normals++;
 		vertices++;
+		colors++;
 
-		*normals = 0;
+		*normals = sign*1;
 		*vertices = height; 
+		*colors=0.8; //green
 
 		normals++;
 		vertices++;
+		colors++;
 
-		*normals = zPolar / normalNorm;
+		*normals = sign*1;
 		*vertices = height;
+		*colors=0.8;//blue
 
 		normals++;
 		vertices++;
+		colors++;
 
 		*texcoors = (float)j / (float)nbSlices;
 		texcoors++;
