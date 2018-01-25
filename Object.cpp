@@ -73,7 +73,6 @@ void Object::InitVBO(void) {
 
 
 void Object::updatePosition(GLfloat angle_x, GLfloat angle_y, GLfloat angle_z, glm::vec3 translation) {
-	_modelMatrix = glm::mat4(1);
 	_modelMatrix = glm::rotate(_modelMatrix, angle_z, glm::vec3(0, 0, 1));
 	_modelMatrix = glm::rotate(_modelMatrix, angle_y, glm::vec3(0, 1, 0));
 	_modelMatrix = glm::rotate(_modelMatrix, angle_x, glm::vec3(1, 0, 0));

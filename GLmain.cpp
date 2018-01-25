@@ -252,10 +252,12 @@ int main(void)
 		car.body->draw();
 
 		for (int i = 0; i < 4; i++) {
+			glm::mat4 oldMatrix = car.wheels[i]->getModel(); //Backup physical matrix before modifying it for drawing
 			car.wheels[i]->updatePosition(3.1415 / 2, 0, 3.1415 / 2, glm::vec3(0, 0, 0)); //Correct orientation of wheels just before drawing, so it doesn't affect calculations
 			glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(car.wheels[i]->getModel()));
 			glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(car.wheels[i]->getModel())));
 			car.wheels[i]->draw();
+			car.wheels[i]->setModel(oldMatrix);//Put it back so it is ready for calculations
 		}
 		
 
@@ -287,33 +289,27 @@ void char_callback(GLFWwindow* window, unsigned int key)
 	if (key == 'o' || key == 'O')
 		perspective = false;
 	if (key == 'k') {
-		car.rotate(0, 0, 0.1);
-		//rotation_angle_z += 0.01f;
+		rotation_angle_z += 0.01f;
 	}
 
 	if (key == 'l') {
-		car.rotate(0, 0, -0.1);
-		//rotation_angle_z -= 0.01f;
+		rotation_angle_z -= 0.01f;
 	}
 
 	if (key == 'u') {
-		car.rotate(0, 0.1, 0);
-		//rotation_angle_y += 0.01f;
+		rotation_angle_y += 0.01f;
 	}
 
 	if (key == 'j') {
-		car.rotate(0, -0.1, 0);
-		//rotation_angle_y -= 0.01f;
+		rotation_angle_y -= 0.01f;
 	}
 
 	if (key == 'h') {
-		car.rotate(0.1, 0, 0);
-		//rotation_angle_x += 0.01f;
+		rotation_angle_x += 0.01f;
 	}
 
 	if (key == 'n') {
-		car.rotate(-0.1, 0, 0);
-		//rotation_angle_x -= 0.01f;
+		rotation_angle_x -= 0.01f;
 	}
 
 	if (key == 'f') {
