@@ -67,7 +67,7 @@ void Cylinder::buildCylinder(float baseRadius, float height, int nbSlices)
 		colors++;
 		
 		*normals = normY / normalNorm;
-		*vertices = 0;
+		*vertices = zPolar * baseRadius;
 		*colors=0.2; //green
 
 		normals++;
@@ -75,7 +75,7 @@ void Cylinder::buildCylinder(float baseRadius, float height, int nbSlices)
 		colors++;
 
 		*normals = zPolar / normalNorm;
-		*vertices = zPolar * baseRadius;
+		*vertices = 0;
 		*colors=0.2; //blue
 		
 		normals++;
@@ -97,7 +97,7 @@ void Cylinder::buildCylinder(float baseRadius, float height, int nbSlices)
 		colors++;
 
 		*normals = (baseRadius - _topRadius) / height;
-		*vertices = height;
+		*vertices = zPolar * _topRadius;
 		*colors=0.2; //green
 
 		normals++;
@@ -105,7 +105,7 @@ void Cylinder::buildCylinder(float baseRadius, float height, int nbSlices)
 		colors++;
 
 		*normals = zPolar / normalNorm;
-		*vertices = zPolar * _topRadius;
+		*vertices = height;
 		*colors=0.2; //blue;
 
 		normals++;

@@ -33,7 +33,7 @@ GLfloat translateY = 0.0f;
 // light
 float lightPosition[3] = { 0.0f , 0.0f , 8.0f };
 float lightPos[3] = { 3.0f, 3.0f, 3.0f };
-float ambientLight[3] = { 0.1f, 0.1f, 0.1f };
+float ambientLight[3] = { 0.51f, 0.51f, 0.51f };
 glm::vec3 cameraPosition =  glm::vec3( 2.0f, 2.0f, 10.0f );
 glm::vec3 cameraDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 
@@ -252,9 +252,12 @@ int main(void)
 		car.body->draw();
 
 		for (int i = 0; i < 4; i++) {
+			glm::mat4 oldMatrix = car.wheels[i]->getModel(); //Backup physical matrix before modifying it for drawing
+			car.wheels[i]->updatePosition(3.1415 / 2, 0, 3.1415 / 2, glm::vec3(0, 0, 0)); //Correct orientation of wheels just before drawing, so it doesn't affect calculations
 			glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(car.wheels[i]->getModel()));
 			glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(car.wheels[i]->getModel())));
 			car.wheels[i]->draw();
+			car.wheels[i]->setModel(oldMatrix);//Put it back so it is ready for calculations
 		}
 		
 

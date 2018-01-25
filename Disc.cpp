@@ -64,7 +64,7 @@ void Disc::buildDisc(float baseRadius, float height, int nbSlices)
 		colors++;
 
 		*normals = sign*1;
-		*vertices = height;
+		*vertices = zPolar * baseRadius;
 		*colors=0.8; //green
 
 		normals++;
@@ -72,7 +72,7 @@ void Disc::buildDisc(float baseRadius, float height, int nbSlices)
 		colors++;
 
 		*normals = sign*1;
-		*vertices = zPolar * baseRadius;
+		*vertices = height;
 		*colors=0.8;//blue
 
 		normals++;
