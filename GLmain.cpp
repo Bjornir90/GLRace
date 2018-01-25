@@ -281,7 +281,7 @@ int main(void)
 			translateX += 0.01f;
 		}
 
-		cameraPosition = glm::vec3(carPosition - glm::vec3(sin(carAngle[1]), -3, 5*cos(carAngle[1])));
+		cameraPosition = glm::vec3(carPosition - glm::vec3(5*sin(carAngle[1]), -3, 5*cos(carAngle[1])));
 		printf("Camera : %f %f\n", cameraPosition[1], cameraPosition[2]);
 		cameraDirection = carPosition;
 		
