@@ -9,14 +9,15 @@ public:
 	Car();
 	~Car();
 
-	void buildCar();
-	void draw();
-	void move(glm::vec3 translation);
+	void Car::buildCar();
+	void Car::draw();
+	void Car::move(glm::vec3 translation);
 	glm::vec3 _position;
-
-protected:
 	CarBody * body;
 	Wheel * wheels[4];
+	void Car::rotate(GLfloat angle_x, GLfloat angle_y, GLfloat angle_z);
+
+protected:
 	float * _wheelsOffset;
 };
 

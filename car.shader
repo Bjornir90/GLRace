@@ -79,7 +79,7 @@ void main() {
 	float diffuse = max(dot(normalize(normalOut), lightDir), 0.0f)*0.5f;
 
 	vec3 reflectDir = reflect(-lightDir, normalize(normalOut)); 
-	float spec = pow(max(dot(cameraDirection, reflectDir), 0.0), 32)*0.5f;
+	float spec = pow(max(dot(cameraDirection, reflectDir), 0.0), 16)*0.3f;
 
 	frag_colour.rgb = vec3((diffuse + ambient + spec)*colorOut);
 	//frag_colour.r = ambient[0]*distance;

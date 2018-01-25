@@ -24,8 +24,8 @@ GLint uniform_ambient;
 GLint uniform_camera;
 
 // rotation angle
-GLfloat rotation_angle = 0.0f;
-GLfloat rotation_angle_vert = 0.0f;
+GLfloat rotation_angle_z = 0.0f;
+GLfloat rotation_angle_y = 0.0f;
 GLfloat rotation_angle_x = 0.0f;
 GLfloat translateY = 0.0f;
 
@@ -190,7 +190,6 @@ int main(void)
 	//body.buildBody(28, 1);
 	//body.InitVBO();
 	car.buildCar();
-	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
 	ShaderProgramSources source = ParseShader("car.shader");
 	unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
@@ -226,10 +225,6 @@ int main(void)
 
 		// Model matrix : a varying rotation matrix (around Oz)
 		
-		modelMatrix = glm::rotate(modelMatrix, rotation_angle, glm::vec3(0, 0, 1));
-		modelMatrix = glm::rotate(modelMatrix, rotation_angle_vert, glm::vec3(0, 1, 0));
-		modelMatrix = glm::rotate(modelMatrix, rotation_angle_x, glm::vec3(1, 0, 0));
-		modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, translateY));
 
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -238,8 +233,8 @@ int main(void)
 		//glBindVertexArray(body._vao);
 		glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 		glUniformMatrix4fv(uniform_view, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-		glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(modelMatrix));
-		glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(modelMatrix)));
+		glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(car.body->getModel()));
+		glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(car.body->getModel())));
 		glUniform3fv(uniform_light, 1, lightPosition);
 		glUniform3fv(uniform_ambient, 1, ambientLight);
 		glUniform3f(uniform_camera, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
@@ -252,6 +247,8 @@ int main(void)
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
 		// draw points from the currently bound VAO with current in-use shader
+		car.move(glm::vec3(0, 0, translateY));
+		car.rotate(rotation_angle_x, rotation_angle_y, rotation_angle_z);
 		car.draw();
 
 		
@@ -282,19 +279,19 @@ void char_callback(GLFWwindow* window, unsigned int key)
 	if (key == 'o' || key == 'O')
 		perspective = false;
 	if (key == 'k') {
-		rotation_angle += 0.01f;
+		rotation_angle_z += 0.01f;
 	}
 
 	if (key == 'l') {
-		rotation_angle -= 0.01f;
+		rotation_angle_z -= 0.01f;
 	}
 
 	if (key == 'u') {
-		rotation_angle_vert += 0.01f;
+		rotation_angle_y += 0.01f;
 	}
 
 	if (key == 'j') {
-		rotation_angle_vert -= 0.01f;
+		rotation_angle_y -= 0.01f;
 	}
 
 	if (key == 'h') {

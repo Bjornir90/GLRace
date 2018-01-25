@@ -48,4 +48,14 @@ void Car::draw() {
 
 void Car::move(glm::vec3 translation) {
 	body->updatePosition(0, 0, 0, translation);
+	for (int i = 0; i < 4; i++) {
+		wheels[i]->updatePosition(0, 0, 0, translation);
+	}
+}
+
+void Car::rotate(GLfloat angle_x, GLfloat angle_y, GLfloat angle_z) {
+	body->updatePosition(angle_x, angle_y, angle_z, glm::vec3(0,0,0));
+	for (int i = 0; i < 4; i++) {
+		wheels[i]->updatePosition(angle_x, angle_y, angle_z, glm::vec3(0, 0, 0));
+	}
 }
