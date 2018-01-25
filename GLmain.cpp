@@ -257,17 +257,29 @@ int main(void)
 		car.body->draw();
 
 		//The car slows down because of friction forces
-		/*if (translateY > 0.0f) {
-			if (translateY < 0.05) {
-				translateY -= 0.005*translateY;
+		if (translateX > 0.0f) {
+			if (translateX < 0.05) {
+				translateX -= 0.005*translateX;
 			}
 			else {
-				translateY -= 10 * translateY*translateY;
+				translateX -= 10 * translateX*translateX;
 			}
 		}
-		if (translateY > 2.0f) {
-			translateY -= 0.01f;
-		}*/
+		if (translateX > 2.0f) {
+			translateX -= 0.01f;
+		}
+
+		if (translateX < 0.0f) {
+			if (translateX > -0.05) {
+				translateX -= 0.001*translateX;
+			}
+			else {
+				translateX += 10 * translateX*translateX;
+			}
+		}
+		if (translateX < -5.0f) {
+			translateX += 0.01f;
+		}
 
 		cameraPosition = glm::vec3(carPosition - glm::vec3(sin(carAngle[1]), -3, 5*cos(carAngle[1])));
 		printf("Camera : %f %f\n", cameraPosition[1], cameraPosition[2]);
