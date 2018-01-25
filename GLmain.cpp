@@ -21,6 +21,7 @@ GLint uniform_proj;
 GLint uniform_texture;
 GLint uniform_light;
 GLint uniform_ambient;
+GLint uniform_camera;
 
 // rotation angle
 GLfloat rotation_angle = 0.0f;
@@ -32,8 +33,9 @@ GLfloat translateY = 0.0f;
 // light
 float lightPosition[3] = { 0.0f , 0.0f , 8.0f };
 float lightPos[3] = { 3.0f, 3.0f, 3.0f };
-float ambientLight[3] = { 0.2f, 0.2f, 0.2f };
+float ambientLight[3] = { 0.1f, 0.1f, 0.1f };
 glm::vec3 cameraPosition =  glm::vec3( 2.0f, 2.0f, 10.0f );
+glm::vec3 cameraDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 
 int screen_width = 1024;
 int screen_height = 768;
@@ -128,6 +130,7 @@ static unsigned int CreateShader(const std::string& vertexShader, const std::str
 	uniform_texture = glGetUniformLocation(program, "mire");
 	uniform_light = glGetUniformLocation(program, "light");
 	uniform_ambient = glGetUniformLocation(program, "ambient");
+	uniform_camera = glGetUniformLocation(program, "cameraDirection");
 
 	if (uniform_model == -1)
 		fprintf(stderr, "Could not bind uniform uniform_model\n");
@@ -216,9 +219,9 @@ int main(void)
 		// Camera matrix
 		viewMatrix
 			= glm::lookAt(
-				cameraPosition, // Camera is at (8,2,0), in World Space
-				glm::vec3(-2, -2, -10) + cameraPosition, // and looks at the origin
-				glm::vec3(0, 0, 1)  // Head is up (set to 0,1,0)
+				cameraPosition, // Camera is at (2,2,8), in World Space
+				cameraDirection, // and looks in the direction
+				glm::vec3(0, 0, 1)  
 			);
 
 		// Model matrix : a varying rotation matrix (around Oz)
@@ -239,6 +242,7 @@ int main(void)
 		glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(modelMatrix)));
 		glUniform3fv(uniform_light, 1, lightPosition);
 		glUniform3fv(uniform_ambient, 1, ambientLight);
+		glUniform3f(uniform_camera, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
 
 		glUniform1i(uniform_texture, 0); //Texture unit 0 is for base images.
 		glActiveTexture(GL_TEXTURE0 + 0);

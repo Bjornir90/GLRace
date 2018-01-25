@@ -98,7 +98,7 @@ void Cylinder::buildCylinder(float baseRadius, float height, int nbSlices)
 
 		*normals = (baseRadius - _topRadius) / height;
 		*vertices = height;
-		*clors=0.2; //green
+		*colors=0.2; //green
 
 		normals++;
 		vertices++;

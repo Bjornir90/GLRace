@@ -56,6 +56,8 @@ in vec3 positionOut;
 
 // uniforms
 uniform vec3 ambient;
+uniform vec3 cameraPosition;
+uniform mat4 inverseModelMatrix;
 // uniform sampler2DRect mire;
 
 // out color
@@ -68,10 +70,17 @@ void main() {
 	}
 	float distance = sqrt(sum);
 
+	// camera position in model coordinates
+	vec3 camera = (inverseModelMatrix * vec4(cameraPosition, 1.0)).xyz;
 
+	vec3 cameraDirection = normalize(positionOut - camera);
 	vec3 lightDir = normalize(lightOut - positionOut);
 	// diffuse lighting contribution to color
-	float diffuse = max(dot(normalize(normalOut), lightDir), 0.0f);
-	frag_colour.rgb = vec3((diffuse + ambient)*colorOut);
+	float diffuse = max(dot(normalize(normalOut), lightDir), 0.0f)*0.5f;
+
+	vec3 reflectDir = reflect(-lightDir, normalize(normalOut)); 
+	float spec = pow(max(dot(cameraDirection, reflectDir), 0.0), 32)*0.5f;
+
+	frag_colour.rgb = vec3((diffuse + ambient + spec)*colorOut);
 	//frag_colour.r = ambient[0]*distance;
 }

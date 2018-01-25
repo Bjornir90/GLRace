@@ -28,9 +28,9 @@ void Disc::buildDisc(float baseRadius, float height, int nbSlices)
 	_baseRadius = baseRadius;
 	_height = height;
 	
-	if (height==0){
+	//if (height==0){
 		int sign=-1;
-	}
+	//}
 	// angular distance between two lines
 	deltaPhi = 2 * M_PI / nbSlices;
 

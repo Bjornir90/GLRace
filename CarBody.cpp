@@ -261,11 +261,11 @@ void CarBody::buildBody(int size, float reductionFactor) {
 		_wheelsOffset[i] = wheelsOffset[i];
 	}
 
+	/*CarBody::tesselate(1);
 	CarBody::tesselate(1);
 	CarBody::tesselate(1);
 	CarBody::tesselate(1);
-	CarBody::tesselate(1);
-	
+	*/
 }
 
 
