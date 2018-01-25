@@ -57,6 +57,8 @@ void Car::move(glm::vec3 translation) {
 void Car::rotate(GLfloat angle_x, GLfloat angle_y, GLfloat angle_z) {
 	body->updatePosition(angle_x, angle_y, angle_z, glm::vec3(0,0,0));
 	for (int i = 0; i < 4; i++) {
-		wheels[i]->updatePosition(angle_x, angle_y, angle_z, glm::vec3(0, cos(angle_x)*_wheelsOffset[1], sin(angle_x)*_wheelsOffset[2]));
+		wheels[i]->updatePosition(0, 0, 0, glm::vec3(-_wheelsOffset[i * 3], -_wheelsOffset[i * 3 + 1], -_wheelsOffset[i * 3 + 2]));
+		wheels[i]->updatePosition(angle_x, angle_y, angle_z, glm::vec3(0, 0, 0));
+		wheels[i]->updatePosition(0, 0, 0, glm::vec3(_wheelsOffset[i * 3], _wheelsOffset[i * 3 + 1], _wheelsOffset[i * 3 + 2]));
 	}
 }
