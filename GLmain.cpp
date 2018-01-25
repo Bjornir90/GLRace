@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "GLmain.h"
 #include "td1_utils.h"
-#include "GeoObject.h"
+//#include "GeoObject.h"
 #include "Car.h"
 
 // perspective vs ortho projection
 bool perspective = true;
 
-GeoObject object;
+//GeoObject object;
 
 CarBody body;
 
@@ -200,9 +200,9 @@ int main(void)
 		// projection matrix
 		glm::mat4 projectionMatrix; // Store the projection matrix
 		glm::mat4 viewMatrix; // Store the view matrix
-		//glm::mat4 modelMatrix; // Store the model matrix
+							  //glm::mat4 modelMatrix; // Store the model matrix
 
-							   // Projection: Perspective or Ortho matrix
+							  // Projection: Perspective or Ortho matrix
 		if (perspective) {
 			projectionMatrix
 				= glm::perspective(45.0f, (float)screen_width / (float)screen_height, 1.0f, 200.0f);
@@ -220,11 +220,11 @@ int main(void)
 			= glm::lookAt(
 				cameraPosition, // Camera is at (2,2,8), in World Space
 				cameraDirection, // and looks in the direction
-				glm::vec3(0, 0, 1)  
+				glm::vec3(0, 0, 1)
 			);
 
 		// Model matrix : a varying rotation matrix (around Oz)
-		
+
 
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -255,22 +255,34 @@ int main(void)
 		car.body->draw();
 
 		//The car slows down because of friction forces
-		/*if (translateY > 0.0f) {
+		if (translateY > 0.0f) {
 			if (translateY < 0.05) {
-				translateY -= 0.005*translateY;
+				translateY -= 0.001*translateY;
 			}
 			else {
 				translateY -= 10 * translateY*translateY;
 			}
 		}
-		if (translateY > 2.0f) {
+		if (translateY > 10.0f) {
 			translateY -= 0.01f;
-		}*/
+		}
 
-		cameraPosition = glm::vec3 ( glm::vec3(0.0, 3, -5) - carPosition );
+		if (translateY < 0.0f) {
+			if (translateY > -0.05) {
+				translateY -= 0.001*translateY;
+			}
+			else {
+				translateY += 10 * translateY*translateY;
+			}
+		}
+		if (translateY < -5.0f) {
+			translateY += 0.01f;
+		}
+
+		cameraPosition = glm::vec3(glm::vec3(0.0, 3, -5) - carPosition);
 		printf("Camera : %f\n", cameraPosition[2]);
 		cameraDirection = carPosition;
-		
+
 
 		for (int i = 0; i < 4; i++) {
 			glm::mat4 oldMatrix = car.wheels[i]->getModel(); //Backup physically correct matrix before modifying it for drawing
@@ -280,9 +292,9 @@ int main(void)
 			car.wheels[i]->draw();
 			car.wheels[i]->setModel(oldMatrix);//Put it back so it is ready for calculations
 		}
-		
 
-		
+
+
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 
@@ -334,11 +346,11 @@ void char_callback(GLFWwindow* window, unsigned int key)
 	}
 
 	if (key == 'f') {
-		translateY -= 0.1f;
+		translateY -= 0.01f;
 	}
 
 	if (key == 'r') {
-		translateY += 0.1f;
+		translateY += 0.01f;
 	}
 
 	if (key == '5') {
