@@ -27,7 +27,7 @@ GLint uniform_camera;
 GLfloat rotation_angle_z = 0.0f;
 GLfloat rotation_angle_y = 0.0f;
 GLfloat rotation_angle_x = 0.0f;
-GLfloat translateY = 0.0f;
+GLfloat translateZ = 0.0f, translateX = 0.0f;
 
 
 // light
@@ -35,6 +35,7 @@ float lightPosition[3] = { 0.0f , 15.0f , 18.0f };
 float lightPos[3] = { 3.0f, 3.0f, 3.0f };
 float ambientLight[3] = { 0.1f, 0.1f, 0.1f };
 glm::vec3 carPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 carAngle = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 cameraPosition = carPosition - glm::vec3(0.0f, -5.0f, 5.0f);
 glm::vec3 cameraDirection = carPosition;
 
@@ -220,11 +221,11 @@ int main(void)
 			= glm::lookAt(
 				cameraPosition, // Camera is at (2,2,8), in World Space
 				cameraDirection, // and looks in the direction
-				glm::vec3(0, 0, 1)  
+				glm::vec3(0, 0, 1)
 			);
 
 		// Model matrix : a varying rotation matrix (around Oz)
-		
+
 
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -247,9 +248,10 @@ int main(void)
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
 		// draw points from the currently bound VAO with current in-use shader
-		glm::vec3 carSpeed = glm::vec3(0, 0, translateY);
-		carPosition += glm::vec3(0, 0, translateY);
-		printf("%f\n", carPosition[2]);
+		glm::vec3 carSpeed = glm::vec3(translateX, 0, translateZ);
+		carAngle += glm::vec3(rotation_angle_x, rotation_angle_y, rotation_angle_z);
+		carPosition += glm::vec3(translateX*sin(carAngle[1]), 0, translateZ*cos(carAngle[1]));
+		printf("%f %f\n", carPosition[1], carPosition[2]);
 		car.move(carSpeed);
 		car.rotate(rotation_angle_x, rotation_angle_y, rotation_angle_z);
 		car.body->draw();
@@ -267,8 +269,8 @@ int main(void)
 			translateY -= 0.01f;
 		}*/
 
-		cameraPosition = glm::vec3 ( glm::vec3(0.0, 3, -5) - carPosition );
-		printf("Camera : %f\n", cameraPosition[2]);
+		cameraPosition = glm::vec3(carPosition - glm::vec3(sin(carAngle[1]), -3, 5*cos(carAngle[1])));
+		printf("Camera : %f %f\n", cameraPosition[1], cameraPosition[2]);
 		cameraDirection = carPosition;
 		
 
@@ -334,11 +336,11 @@ void char_callback(GLFWwindow* window, unsigned int key)
 	}
 
 	if (key == 'f') {
-		translateY -= 0.1f;
+		translateZ -= 0.1f;
 	}
 
 	if (key == 'r') {
-		translateY += 0.1f;
+		translateZ += 0.1f;
 	}
 
 	if (key == '5') {
@@ -363,5 +365,13 @@ void char_callback(GLFWwindow* window, unsigned int key)
 
 	if (key == '7') {
 		cameraPosition[2] -= 0.1f;
+	}
+
+	if (key == '1') {
+		translateX -= 0.1f;
+	}
+
+	if (key == '2') {
+		translateX += 0.1f;
 	}
 }
