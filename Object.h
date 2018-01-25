@@ -13,6 +13,8 @@ public:
 	unsigned int _vao;
 	void InitVBO(void);
 	unsigned int getSize() { return _size; }
+	glm::mat4 getModel() { return _modelMatrix;}
+	void setModel(glm::mat4 model) { _modelMatrix = model; }
 
 protected:
 	float * _vertices;
@@ -20,6 +22,6 @@ protected:
 	float * _texcoors;
 	float * _colors;
 	unsigned int _size; //Number of Vertices / Normals / Texture Coordonates
-	glm::mat4 modelMatrix;
+	glm::mat4 _modelMatrix;
 };
 

@@ -15,9 +15,6 @@ public:
 	void draw();
 
 
-protected:
-	float * _wheelsOffset;
-
 private:
 	void tesselate(int n);
 };

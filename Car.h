@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CarBody.h"
+#include "Wheel.h"
 
 class Car
 {
@@ -13,5 +14,7 @@ public:
 
 protected:
 	CarBody * body;
+	Wheel * wheels[4];
+	float * _wheelsOffset;
 };
 
