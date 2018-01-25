@@ -27,7 +27,7 @@ GLint uniform_camera;
 GLfloat rotation_angle_z = 0.0f;
 GLfloat rotation_angle_y = 0.0f;
 GLfloat rotation_angle_x = 0.0f;
-GLfloat translateZ = 0.0f, translateX = 0.0f;
+GLfloat translateY = 0.0f, translateX = 0.0f;
 
 
 // light
@@ -35,7 +35,7 @@ float lightPosition[3] = { 0.0f , 15.0f , 18.0f };
 float lightPos[3] = { 3.0f, 3.0f, 3.0f };
 float ambientLight[3] = { 0.1f, 0.1f, 0.1f };
 glm::vec3 carPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-glm::vec3 carAngle = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 carAngle = glm::vec3(3.141592f/2.0f, 0.0f, 0.0f);
 glm::vec3 cameraPosition = carPosition - glm::vec3(0.0f, -5.0f, 5.0f);
 glm::vec3 cameraDirection = carPosition;
 
@@ -234,8 +234,6 @@ int main(void)
 		//glBindVertexArray(body._vao);
 		glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 		glUniformMatrix4fv(uniform_view, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-		glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(car.body->getModel()));
-		glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(car.body->getModel())));
 		glUniform3fv(uniform_light, 1, lightPosition);
 		glUniform3fv(uniform_ambient, 1, ambientLight);
 		glUniform3f(uniform_camera, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
@@ -248,42 +246,46 @@ int main(void)
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
 		// draw points from the currently bound VAO with current in-use shader
-		glm::vec3 carSpeed = glm::vec3(translateX, 0, translateZ);
-		float speedNorm = sqrt(carSpeed[0] * carSpeed[0] + carSpeed[1] * carSpeed[1] + carSpeed[2] * carSpeed[2]);
+		glm::vec3 carSpeed = glm::vec3(translateX, translateY, 0);
 		carAngle += glm::vec3(rotation_angle_x, rotation_angle_y, rotation_angle_z);
-		carPosition += glm::vec3(speedNorm*sin(carAngle[1]), 0, speedNorm*cos(carAngle[1]));
-		printf("Car : %f %f %f %f speed : %f\n", carPosition[1], carPosition[2], carAngle[1], sin(carAngle[1]), speedNorm);
+		carPosition += glm::vec3(carSpeed[1] * cos(carAngle[2]), carSpeed[1] * sin(carAngle[2]), 0);
+		printf("Car : %f %f %f %f speed : %f\n", carPosition[0], carPosition[1], carAngle[2], carSpeed[1] * sin(carAngle[2]), carSpeed[1]);
 		car.move(carSpeed);
 		car.rotate(rotation_angle_x, rotation_angle_y, rotation_angle_z);
-		car.body->draw();
 
 		//The car slows down because of friction forces
-		if (translateX > 0.0f) {
-			if (translateX < 0.05) {
-				translateX -= 0.005*translateX;
+		if (translateY > 0.0f) {
+			if (translateY < 0.05) {
+				translateY -= 0.005*translateY;
 			}
 			else {
-				translateX -= 10 * translateX*translateX;
+				translateY -= 10 * translateY*translateY;
 			}
 		}
-		if (translateX > 2.0f) {
-			translateX -= 0.01f;
+		if (translateY > 2.0f) {
+			translateY -= 0.01f;
 		}
 
-		if (translateX < 0.0f) {
-			if (translateX > -0.05) {
-				translateX -= 0.001*translateX;
+		if (translateY < 0.0f) {
+			if (translateY > -0.05) {
+				translateY -= 0.001*translateY;
 			}
 			else {
-				translateX += 10 * translateX*translateX;
+				translateY += 10 * translateY*translateY;
 			}
 		}
-		if (translateX < -5.0f) {
-			translateX += 0.01f;
+		if (translateY < -5.0f) {
+			translateY += 0.01f;
 		}
 
-		cameraPosition = glm::vec3(carPosition - glm::vec3(5*sin(carAngle[1]), -3, 5*cos(carAngle[1])));
-		printf("Camera : %f %f\n", cameraPosition[1], cameraPosition[2]);
+		/*glm::mat4 oldMatrix = car.body->getModel();//Backup physically correct matrix before modifying it for drawing
+		car.body->updatePosition(3.141592 / 2, 0, 0, glm::vec3(0, 0, 0));
+		glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(car.body->getModel()));
+		glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(car.body->getModel())));*/
+		car.body->draw();
+
+		cameraPosition = glm::vec3(carPosition - glm::vec3(5*cos(carAngle[2]), -5*sin(carAngle[2]), 3));
+		printf("Camera : %f %f\n", cameraPosition[0], cameraPosition[1]);
 		cameraDirection = carPosition;
 		
 
@@ -296,7 +298,6 @@ int main(void)
 			car.wheels[i]->setModel(oldMatrix);//Put it back so it is ready for calculations
 		}
 		
-
 		
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
@@ -349,11 +350,11 @@ void char_callback(GLFWwindow* window, unsigned int key)
 	}
 
 	if (key == 'f') {
-		translateZ -= 0.1f;
+		translateY -= 0.1f;
 	}
 
 	if (key == 'r') {
-		translateZ += 0.1f;
+		translateY += 0.1f;
 	}
 
 	if (key == '5') {

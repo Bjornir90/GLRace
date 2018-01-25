@@ -246,6 +246,15 @@ void CarBody::buildBody(int size, float reductionFactor) {
 		_colors[i] = colors[i];
 	}
 
+	for (int i = 0; i < _size; i++) {
+		float tempVertex = _vertices[i * 3 + 1];
+		float tempNormal = _normals[i * 3 + 1];
+		_vertices[i * 3 + 1] = _vertices[i * 3 + 2];
+		_normals[i * 3 + 1] = _normals[i * 3 + 2];
+		_vertices[i * 3 + 2] = tempVertex;
+		_normals[i * 3 + 2] = tempNormal;
+	}
+
 	for (unsigned int i = 0; i<_size * 2; i++)
 	{
 		_texcoors[i] = texCoord[i];
