@@ -31,7 +31,7 @@ GLfloat translateY = 0.0f;
 
 
 // light
-float lightPosition[3] = { 0.0f , 15.0f , 8.0f };
+float lightPosition[3] = { 0.0f , 15.0f , 18.0f };
 float lightPos[3] = { 3.0f, 3.0f, 3.0f };
 float ambientLight[3] = { 0.1f, 0.1f, 0.1f };
 glm::vec3 carPosition = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -247,14 +247,15 @@ int main(void)
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
 		// draw points from the currently bound VAO with current in-use shader
-		carPosition = glm::vec3(0, 0, translateY);
-		printf("%f\n", translateY);
-		car.move(carPosition);
+		glm::vec3 carSpeed = glm::vec3(0, 0, translateY);
+		carPosition += glm::vec3(0, 0, translateY);
+		printf("%f\n", carPosition[2]);
+		car.move(carSpeed);
 		car.rotate(rotation_angle_x, rotation_angle_y, rotation_angle_z);
 		car.body->draw();
 
 		//The car slows down because of friction forces
-		if (translateY > 0.0f) {
+		/*if (translateY > 0.0f) {
 			if (translateY < 0.05) {
 				translateY -= 0.005*translateY;
 			}
@@ -264,11 +265,12 @@ int main(void)
 		}
 		if (translateY > 2.0f) {
 			translateY -= 0.01f;
-		}
+		}*/
 
-		cameraPosition[2] += translateY;
-		cameraDirection[2] += translateY;
-
+		cameraPosition = glm::vec3 ( glm::vec3(0.0, 3, -5) - carPosition );
+		printf("Camera : %f\n", cameraPosition[2]);
+		cameraDirection = carPosition;
+		
 
 		for (int i = 0; i < 4; i++) {
 			glm::mat4 oldMatrix = car.wheels[i]->getModel(); //Backup physically correct matrix before modifying it for drawing
