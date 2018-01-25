@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "GLmain.h"
 #include "td1_utils.h"
-#include "GeoObject.h"
+//#include "GeoObject.h"
 #include "Car.h"
+#include<time.h>
 
 // perspective vs ortho projection
 bool perspective = true;
 
-GeoObject object;
+//GeoObject object;
 
 CarBody body;
 
@@ -33,9 +34,9 @@ GLfloat translateY = 0.0f;
 // light
 float lightPosition[3] = { 0.0f , 0.0f , 8.0f };
 float lightPos[3] = { 3.0f, 3.0f, 3.0f };
-float ambientLight[3] = { 0.51f, 0.51f, 0.51f };
-glm::vec3 cameraPosition =  glm::vec3( 2.0f, 2.0f, 10.0f );
-glm::vec3 cameraDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+float ambientLight[3] = { 0.1f, 0.1f, 0.1f };
+glm::vec3 cameraPosition = glm::vec3(50.0f, 50.0f, 50.0f);
+glm::vec3 cameraDirection = glm::vec3(0.0f, 0.0f, 0.0f);
 
 int screen_width = 1024;
 int screen_height = 768;
@@ -201,9 +202,9 @@ int main(void)
 		// projection matrix
 		glm::mat4 projectionMatrix; // Store the projection matrix
 		glm::mat4 viewMatrix; // Store the view matrix
-		//glm::mat4 modelMatrix; // Store the model matrix
+							  //glm::mat4 modelMatrix; // Store the model matrix
 
-							   // Projection: Perspective or Ortho matrix
+							  // Projection: Perspective or Ortho matrix
 		if (perspective) {
 			projectionMatrix
 				= glm::perspective(45.0f, (float)screen_width / (float)screen_height, 1.0f, 200.0f);
@@ -220,11 +221,11 @@ int main(void)
 			= glm::lookAt(
 				cameraPosition, // Camera is at (2,2,8), in World Space
 				cameraDirection, // and looks in the direction
-				glm::vec3(0, 0, 1)  
+				glm::vec3(0, 1, 0)
 			);
 
 		// Model matrix : a varying rotation matrix (around Oz)
-		
+
 
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -245,23 +246,33 @@ int main(void)
 
 		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_2D, textureID);
-
 		// draw points from the currently bound VAO with current in-use shader
 		car.move(glm::vec3(0, 0, translateY));
 		car.rotate(rotation_angle_x, rotation_angle_y, rotation_angle_z);
 		car.body->draw();
 
-		for (int i = 0; i < 4; i++) {
-			glm::mat4 oldMatrix = car.wheels[i]->getModel(); //Backup physical matrix before modifying it for drawing
-			car.wheels[i]->updatePosition(3.1415 / 2, 0, 3.1415 / 2, glm::vec3(0, 0, 0)); //Correct orientation of wheels just before drawing, so it doesn't affect calculations
-			glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(car.wheels[i]->getModel()));
-			glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(car.wheels[i]->getModel())));
-			car.wheels[i]->draw();
-			car.wheels[i]->setModel(oldMatrix);//Put it back so it is ready for calculations
+		//The car slows down because of friction forces
+		if (translateY > 0.0f) {
+			if (translateY < 0.05) {
+				translateY -= 0.005*translateY;
+			}
+			else {
+				translateY -= 10*translateY*translateY;
+			}
+		}
+		if (translateY > 2.0f) {
+			translateY -= 0.01f;
 		}
 		
 
-		
+		for (int i = 0; i < 4; i++) {
+			glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(car.wheels[i]->getModel()));
+			glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(car.wheels[i]->getModel())));
+			car.wheels[i]->draw();
+		}
+
+
+
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 
@@ -286,8 +297,11 @@ void char_callback(GLFWwindow* window, unsigned int key)
 {
 	if (key == 'p' || key == 'P')
 		perspective = true;
-	if (key == 'o' || key == 'O')
+	if (key == 'c' || key == 'C') {
 		perspective = false;
+		//cameraPosition = ;
+	}
+
 	if (key == 'k') {
 		rotation_angle_z += 0.01f;
 	}
@@ -313,15 +327,35 @@ void char_callback(GLFWwindow* window, unsigned int key)
 	}
 
 	if (key == 'f') {
-		translateY -= 0.1f;
+		translateY -= 0.01f;
 	}
 
 	if (key == 'r') {
-		translateY += 0.1f;
+		translateY += 0.01f;
 	}
 
 	if (key == '5') {
 		cameraPosition[0] += 0.1f;
+	}
+
+	if (key == '8') {
+		cameraPosition[0] -= 0.1f;
+	}
+
+	if (key == '6') {
+		cameraPosition[1] += 0.1f;
+	}
+
+	if (key == '4') {
+		cameraPosition[1] -= 0.1f;
+	}
+
+	if (key == '9') {
+		cameraPosition[2] += 0.1f;
+	}
+
+	if (key == '7') {
+		cameraPosition[2] -= 0.1f;
 	}
 
 	if (key == '8') {
