@@ -37,6 +37,7 @@ void Car::buildCar() {
 		wheels[i]->setModel(glm::translate(wheels[i]->getModel(), offset));
 		wheels[i]->buildWheel();
 	}
+	//Car::rotate(3.1415 / 2, 0, 0);
 }
 
 void Car::draw() {
@@ -56,6 +57,6 @@ void Car::move(glm::vec3 translation) {
 void Car::rotate(GLfloat angle_x, GLfloat angle_y, GLfloat angle_z) {
 	body->updatePosition(angle_x, angle_y, angle_z, glm::vec3(0,0,0));
 	for (int i = 0; i < 4; i++) {
-		wheels[i]->updatePosition(angle_x, angle_y, angle_z, glm::vec3(0, 0, 0));
+		wheels[i]->updatePosition(angle_y, angle_x, angle_z, glm::vec3(0, 0, 0));
 	}
 }
