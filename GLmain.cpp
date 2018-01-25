@@ -31,11 +31,12 @@ GLfloat translateY = 0.0f;
 
 
 // light
-float lightPosition[3] = { 0.0f , 0.0f , 8.0f };
+float lightPosition[3] = { 0.0f , 15.0f , 8.0f };
 float lightPos[3] = { 3.0f, 3.0f, 3.0f };
-float ambientLight[3] = { 0.51f, 0.51f, 0.51f };
-glm::vec3 cameraPosition =  glm::vec3( 2.0f, 2.0f, 10.0f );
-glm::vec3 cameraDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+float ambientLight[3] = { 0.1f, 0.1f, 0.1f };
+glm::vec3 carPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 cameraPosition = carPosition - glm::vec3(0.0f, -5.0f, 5.0f);
+glm::vec3 cameraDirection = carPosition;
 
 int screen_width = 1024;
 int screen_height = 768;
@@ -215,6 +216,7 @@ int main(void)
 					-2.0f, 2.0f, -10.0f, 10.0f);
 		}
 
+
 		// Camera matrix
 		viewMatrix
 			= glm::lookAt(
@@ -247,10 +249,13 @@ int main(void)
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
 		// draw points from the currently bound VAO with current in-use shader
-		car.move(glm::vec3(0, 0, translateY));
+		carPosition = glm::vec3(0, 0, translateY);
+		printf("%f\n", translateY);
+		car.move(carPosition);
 		car.rotate(rotation_angle_x, rotation_angle_y, rotation_angle_z);
 		car.body->draw();
-
+		cameraPosition[2] += translateY;
+		cameraDirection[2] += translateY;
 		for (int i = 0; i < 4; i++) {
 			glm::mat4 oldMatrix = car.wheels[i]->getModel(); //Backup physical matrix before modifying it for drawing
 			car.wheels[i]->updatePosition(3.1415 / 2, 0, 3.1415 / 2, glm::vec3(0, 0, 0)); //Correct orientation of wheels just before drawing, so it doesn't affect calculations
