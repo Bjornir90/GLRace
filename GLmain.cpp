@@ -188,8 +188,6 @@ int main(void)
 	glEnable(GL_DEPTH_TEST);
 
 	//create object
-	//body.buildBody(28, 1);
-	//body.InitVBO();
 	car.buildCar();
 
 	ShaderProgramSources source = ParseShader("car.shader");
@@ -254,10 +252,26 @@ int main(void)
 		car.move(carPosition);
 		car.rotate(rotation_angle_x, rotation_angle_y, rotation_angle_z);
 		car.body->draw();
+
+		//The car slows down because of friction forces
+		if (translateY > 0.0f) {
+			if (translateY < 0.05) {
+				translateY -= 0.005*translateY;
+			}
+			else {
+				translateY -= 10 * translateY*translateY;
+			}
+		}
+		if (translateY > 2.0f) {
+			translateY -= 0.01f;
+		}
+
 		cameraPosition[2] += translateY;
 		cameraDirection[2] += translateY;
+
+
 		for (int i = 0; i < 4; i++) {
-			glm::mat4 oldMatrix = car.wheels[i]->getModel(); //Backup physical matrix before modifying it for drawing
+			glm::mat4 oldMatrix = car.wheels[i]->getModel(); //Backup physically correct matrix before modifying it for drawing
 			car.wheels[i]->updatePosition(3.1415 / 2, 0, 3.1415 / 2, glm::vec3(0, 0, 0)); //Correct orientation of wheels just before drawing, so it doesn't affect calculations
 			glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(car.wheels[i]->getModel()));
 			glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(car.wheels[i]->getModel())));
