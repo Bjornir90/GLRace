@@ -27,6 +27,7 @@ void Cylinder::buildCylinder(float baseRadius, float height, int nbSlices)
 
 	_vertices = new float[_size * 3];
 	_normals = new float[_size * 3];
+	_colors = new float[_size * 3];
 	_texcoors = new float[_size * 2];
 
 	_baseRadius = baseRadius;
@@ -38,6 +39,7 @@ void Cylinder::buildCylinder(float baseRadius, float height, int nbSlices)
 
 	float *vertices = _vertices;
 	float *normals = _normals;
+	float *colors=_colors;
 	float *texcoors = _texcoors;
 
 	// triangle strips made of vertical stacks
@@ -58,22 +60,28 @@ void Cylinder::buildCylinder(float baseRadius, float height, int nbSlices)
 		// vertex #1 (theta , phi)
 		*normals = xPolar / normalNorm;
 		*vertices = xPolar * baseRadius;
+		*colors=0.2; //red
 
 		normals++;
 		vertices++;
-
+		colors++;
+		
 		*normals = normY / normalNorm;
 		*vertices = 0;
+		*colors=0.2; //green
 
 		normals++;
 		vertices++;
+		colors++;
 
 		*normals = zPolar / normalNorm;
 		*vertices = zPolar * baseRadius;
-
+		*colors=0.2; //blue
+		
 		normals++;
 		vertices++;
-
+		colors++;
+		
 		*texcoors = (float)j / (float)nbSlices;
 		texcoors++;
 		*texcoors = 0.f;
@@ -82,21 +90,27 @@ void Cylinder::buildCylinder(float baseRadius, float height, int nbSlices)
 		// vertex #2 (theta , phiPrime)
 		*normals = xPolar / normalNorm;
 		*vertices = xPolar * _topRadius;
+		*colors=0.2; //red
 
 		normals++;
 		vertices++;
+		colors++;
 
 		*normals = (baseRadius - _topRadius) / height;
 		*vertices = height;
+		*clors=0.2; //green
 
 		normals++;
 		vertices++;
+		colors++;
 
 		*normals = zPolar / normalNorm;
 		*vertices = zPolar * _topRadius;
+		*colors=0.2; //blue;
 
 		normals++;
 		vertices++;
+		colors++;
 
 		*texcoors = (float)j / (float)nbSlices;
 		texcoors++;
