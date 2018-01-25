@@ -37,7 +37,9 @@ void Car::buildCar() {
 		wheels[i]->setModel(glm::translate(wheels[i]->getModel(), offset));
 		wheels[i]->buildWheel();
 	}
-	//Car::rotate(3.1415 / 2, 0, 0);
+	_angle_x = 0.0f;
+	_angle_y = 0.0f;
+	_angle_z = 0.0f;
 }
 
 void Car::draw() {
@@ -48,15 +50,20 @@ void Car::draw() {
 }
 
 void Car::move(glm::vec3 translation) {
-	body->updatePosition(0, 0, 0, translation);
+	_position += translation;
+	body->updatePosition(0, 0, 0, _position);
 	for (int i = 0; i < 4; i++) {
-		wheels[i]->updatePosition(0, 0, 0, translation);
+		wheels[i]->updatePosition(0, 0, 0, _position);
 	}
 }
 
 void Car::rotate(GLfloat angle_x, GLfloat angle_y, GLfloat angle_z) {
-	body->updatePosition(angle_x, angle_y, angle_z, glm::vec3(0,0,0));
+	_angle_x += angle_x;
+	_angle_y += angle_y;
+	_angle_z += angle_z;
+	body->updatePosition(_angle_x, _angle_y, _angle_z, glm::vec3(0,0,0));
 	for (int i = 0; i < 4; i++) {
-		wheels[i]->updatePosition(angle_x, angle_y, angle_z, glm::vec3(0, cos(angle_x)*_wheelsOffset[1], sin(angle_x)*_wheelsOffset[2]));
+		float norm = sqrt(_wheelsOffset[0] * _wheelsOffset[0] + _wheelsOffset[1] * _wheelsOffset[1] + _wheelsOffset[2] * _wheelsOffset[2]);
+		wheels[i]->updatePosition(_angle_x, _angle_y, _angle_z, glm::vec3(0, 0, 0));
 	}
 }
