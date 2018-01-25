@@ -5,6 +5,7 @@
 Car::Car()
 {
 	_wheelsOffset = NULL;
+	_position = glm::vec3(0.0f);
 }
 
 
@@ -43,4 +44,8 @@ void Car::draw() {
 	for (int i = 0; i < 4; i++) {
 		wheels[i]->draw();
 	}
+}
+
+void Car::move(glm::vec3 translation) {
+	body->updatePosition(0, 0, 0, translation);
 }

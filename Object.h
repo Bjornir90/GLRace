@@ -15,6 +15,8 @@ public:
 	unsigned int getSize() { return _size; }
 	glm::mat4 getModel() { return _modelMatrix;}
 	void setModel(glm::mat4 model) { _modelMatrix = model; }
+	void updatePosition(GLfloat angle_x, GLfloat angle_y, GLfloat angle_z, glm::vec3 translation);
+	
 
 protected:
 	float * _vertices;
