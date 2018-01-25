@@ -27,6 +27,8 @@ void Wheel::buildWheel() {
 	_side[LEFT]->InitVBO();
 	_side[RIGHT]->InitVBO();
 	_edge->InitVBO();
+
+	updatePosition(0, 0, 3.1415/2, glm::vec3(0, 0, 0));
 }
 
 void Wheel::draw()

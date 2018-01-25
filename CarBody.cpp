@@ -256,7 +256,7 @@ void CarBody::buildBody(int size, float reductionFactor) {
 	CarBody::tesselate(1);
 	CarBody::tesselate(1);
 	*/
-	updatePosition(3.1415/2, 0, 0, glm::vec3(0, 0, 0));
+	//updatePosition(3.1415/2, 0, 0, glm::vec3(0, 0, 0));
 }
 
 

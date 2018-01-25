@@ -15,10 +15,10 @@ Car::~Car()
 
 
 void Car::buildCar() {
-	float wheelsOffset[] = { 1, -0.5, 1.5,
-		-1, -0.5, 1.5,
-		1, -0.5, -1.5,
-		-1, -0.5, -1.5
+	float wheelsOffset[] = { 1.7, -0.7, 1.5,
+		-1.7, -0.7, 1.5,
+		1.7, -0.7, -1.5,
+		-1.7, -0.7, -1.5
 	};
 
 	_wheelsOffset = new float[12];
