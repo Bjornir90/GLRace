@@ -3,6 +3,7 @@
 #include "td1_utils.h"
 #include "GeoObject.h"
 #include "Car.h"
+#include "Road.h"
 
 // perspective vs ortho projection
 bool perspective = true;
@@ -38,6 +39,9 @@ glm::vec3 carPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 carAngle = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 cameraPosition = carPosition - glm::vec3(0.0f, -5.0f, 5.0f);
 glm::vec3 cameraDirection = carPosition;
+float cameraZ = 1;
+
+Road* road;
 
 int screen_width = 1024;
 int screen_height = 768;
@@ -190,6 +194,16 @@ int main(void)
 
 	//create object
 	car.buildCar();
+	glm::vec4 points[] = {
+		glm::vec4(10.0f,  10.0f, 0.0f, 0.0f),
+		glm::vec4(10.0f, -10.0f, 0.0f, 0.0f),
+		glm::vec4(-10.0f, -10.0f, 0.0f, 0.0f),
+		glm::vec4(-10.0f,  10.0f, 0.0f, 0.0f)
+	};
+	road = new Road();
+	road->buildRoad(points, 4);
+	road->InitVBO();
+	
 
 	ShaderProgramSources source = ParseShader("car.shader");
 	unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
@@ -221,7 +235,7 @@ int main(void)
 			= glm::lookAt(
 				cameraPosition, // Camera is at (2,2,8), in World Space
 				cameraDirection, // and looks in the direction
-				glm::vec3(0, 0, 1)
+				glm::vec3(0, 0, cameraZ)
 			);
 
 		// Model matrix : a varying rotation matrix (around Oz)
@@ -251,7 +265,8 @@ int main(void)
 		glm::vec3 carSpeed = glm::vec3(translateX, 0, translateZ);
 		carAngle += glm::vec3(rotation_angle_x, rotation_angle_y, rotation_angle_z);
 		carPosition += glm::vec3(carSpeed[2]*sin(carAngle[1]), 0, carSpeed[2]*cos(carAngle[1]));
-		printf("Car : %f %f %f %f speed : %f\n", carPosition[1], carPosition[2], carAngle[1], sin(carAngle[1]), carSpeed[2]);
+		//carPosition = glm::vec3 (glm::inverse(car.body->getModel()) * glm::vec4(carPosition, 1.0));
+		printf("Car : %f %f %f %f\n", carPosition[1], carPosition[2], carAngle[1], sin(carAngle[1]));
 		car.move(carSpeed);
 		car.rotate(rotation_angle_x, rotation_angle_y, rotation_angle_z);
 		car.body->draw();
@@ -295,6 +310,9 @@ int main(void)
 			car.wheels[i]->setModel(oldMatrix);//Put it back so it is ready for calculations
 		}
 		
+		glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(road->getModel()));
+		glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(road->getModel())));
+		road->draw();
 
 		
 		/* Swap front and back buffers */
@@ -385,5 +403,9 @@ void char_callback(GLFWwindow* window, unsigned int key)
 
 	if (key == '2') {
 		translateX += 0.1f;
+	}
+
+	if (key == '0') {
+		cameraZ = -cameraZ;
 	}
 }
