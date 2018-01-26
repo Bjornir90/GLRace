@@ -36,7 +36,7 @@ float lightPos[3] = { 3.0f, 3.0f, 3.0f };
 float ambientLight[3] = { 0.1f, 0.1f, 0.1f };
 glm::vec3 carPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 carAngle = glm::vec3(3.141592f/2.0f, 0.0f, 0.0f);
-glm::vec3 cameraPosition = carPosition - glm::vec3(0.0f, -5.0f, 5.0f);
+glm::vec3 cameraPosition = carPosition - glm::vec3(0.0f, 5.0f, -5.0f);
 glm::vec3 cameraDirection = carPosition;
 
 int screen_width = 1024;
@@ -284,7 +284,7 @@ int main(void)
 		glUniformMatrix4fv(uniform_inverseModel, 1, GL_FALSE, glm::value_ptr(glm::inverse(car.body->getModel())));*/
 		car.body->draw();
 
-		cameraPosition = glm::vec3(carPosition - glm::vec3(5*cos(carAngle[2]), -5*sin(carAngle[2]), 3));
+		//cameraPosition = glm::vec3(carPosition - glm::vec3(5*cos(carAngle[2]), -5*sin(carAngle[2]), 3));
 		printf("Camera : %f %f\n", cameraPosition[0], cameraPosition[1]);
 		cameraDirection = carPosition;
 		

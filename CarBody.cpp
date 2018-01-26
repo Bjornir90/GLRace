@@ -253,6 +253,7 @@ void CarBody::buildBody(int size, float reductionFactor) {
 		_normals[i * 3 + 1] = _normals[i * 3 + 2];
 		_vertices[i * 3 + 2] = tempVertex;
 		_normals[i * 3 + 2] = tempNormal;
+		printf("Vertices inversion : %f %f %f", _vertices[i * 3], _vertices[i * 3 + 1], _vertices[i * 3 + 2]);
 	}
 
 	for (unsigned int i = 0; i<_size * 2; i++)
