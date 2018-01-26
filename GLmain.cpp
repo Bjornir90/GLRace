@@ -249,10 +249,9 @@ int main(void)
 
 		// draw points from the currently bound VAO with current in-use shader
 		glm::vec3 carSpeed = glm::vec3(translateX, 0, translateZ);
-		float speedNorm = sqrt(carSpeed[0] * carSpeed[0] + carSpeed[1] * carSpeed[1] + carSpeed[2] * carSpeed[2]);
 		carAngle += glm::vec3(rotation_angle_x, rotation_angle_y, rotation_angle_z);
-		carPosition += glm::vec3(speedNorm*sin(carAngle[1]), 0, speedNorm*cos(carAngle[1]));
-		printf("Car : %f %f %f %f speed : %f\n", carPosition[1], carPosition[2], carAngle[1], sin(carAngle[1]), speedNorm);
+		carPosition += glm::vec3(carSpeed[2]*sin(carAngle[1]), 0, carSpeed[2]*cos(carAngle[1]));
+		printf("Car : %f %f %f %f speed : %f\n", carPosition[1], carPosition[2], carAngle[1], sin(carAngle[1]), carSpeed[2]);
 		car.move(carSpeed);
 		car.rotate(rotation_angle_x, rotation_angle_y, rotation_angle_z);
 		car.body->draw();
