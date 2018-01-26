@@ -77,7 +77,7 @@ void Road::computeInterfaceVertices(glm::vec4 pprevious, glm::vec4 p, glm::vec4 
 	displayvector(dir2); */
 
 	// create a vector pointing upwards, but tilt angle
-	glm::vec3 up = glm::rotate(glm::vec3(0.0, 0.0, 1.0), p[3], dir1);
+	glm::vec3 up = glm::rotate(glm::vec3(0.0, 1.0, 0.0), p[3], dir1);
 
 	// vectors normal to road direction, pointing to the left
 	glm::vec3 normal1 = glm::cross(up, dir1);

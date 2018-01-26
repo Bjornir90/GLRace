@@ -5,7 +5,7 @@
 #include <gtx/rotate_vector.hpp>
 #include <gtx/norm.hpp>
 
-#define ROAD_WIDTH 8.0f
+#define ROAD_WIDTH 6.0f
 
 class Road : public Object
 {
@@ -29,13 +29,35 @@ Road* road;
 -- SETUP: --
 
 glm::vec4 points[] = {
-	glm::vec4( 10.0f,  10.0f, 0.0f, 0.0f),
-	glm::vec4( 10.0f, -10.0f, 0.0f, 0.0f),
-	glm::vec4(-10.0f, -10.0f, 0.0f, 0.0f),
-	glm::vec4(-10.0f,  10.0f, 0.0f, 0.0f)
+	glm::vec4(  0.0f, 0.0f,  0.0f, 0.0f),
+	glm::vec4( 50.0f, 0.0f,  0.0f, 0.0f),
+	glm::vec4( 70.0f, 0.0f, 10.0f, 0.0f),
+	glm::vec4( 70.0f, 0.0f, 30.0f, 0.0f),
+	glm::vec4( 60.0f, 0.0f, 30.0f, 0.0f),
+	glm::vec4( 60.0f, 0.0f, 45.0f, 0.0f),
+	glm::vec4( 48.0f, 0.0f, 48.0f, 0.0f),
+	glm::vec4( 40.0f, 0.0f, 34.0f, 0.0f),
+	glm::vec4( 40.0f, 0.0f, 20.0f, 0.0f),
+	glm::vec4( 30.0f, 0.0f, 20.0f, 0.0f),
+	glm::vec4( 20.0f, 0.0f, 30.0f, 0.0f),
+	glm::vec4( 10.0f, 0.0f, 50.0f, 0.0f),
+	glm::vec4(  0.0f, 0.0f, 40.0f, 0.0f),
+	glm::vec4(  0.0f, 0.0f, 20.0f, 0.0f),
+	glm::vec4(-15.0f, 0.0f, 20.0f, 0.0f),
+	glm::vec4(-20.0f, 0.0f, 60.0f, 0.0f),
+	glm::vec4(-30.0f, 0.0f, 70.0f, 0.0f),
+	glm::vec4(-40.0f, 0.0f, 60.0f, 0.0f),
+	glm::vec4(-60.0f, 0.0f, 50.0f, 0.0f),
+	glm::vec4(-80.0f, 0.0f, 30.0f, 0.0f),
+	glm::vec4(-70.0f, 0.0f, 10.0f, 0.0f),
+	glm::vec4(-60.0f, 0.0f, 30.0f, 0.0f),
+	glm::vec4(-40.0f, 0.0f, 40.0f, 0.0f),
+	glm::vec4(-30.0f, 0.0f, 30.0f, 0.0f),
+	glm::vec4(-40.0f, 0.0f, 10.0f, 0.0f),
+	glm::vec4(-30.0f, 0.0f,  0.0f, 0.0f)
 };
 road = new Road();
-road->buildRoad(points, 4);
+road->buildRoad(points, 26);
 road->InitVBO();
 
 
